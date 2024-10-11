@@ -1,0 +1,30 @@
+Employee
+	Name
+	Email
+	Phone Number
+	Base Salary
+	Status (e.g., Active, Inactive)
+	Marital Status
+	PAN 
+	Citizenship Number
+	Employment Type (e.g., Full-Time, Part-Time, Contract)
+	Profile Picture
+Employee Type
+	Name
+	Level (e.g., Junior, Mid, Senior)
+Time Storage
+	Start Time
+	End Time
+	Date
+Salary
+	Employee Name
+	Phone Number
+	Total Salary
+	Bonus
+TaskGiven
+	Name
+	Description
+	Severity (e.g., Low, Medium, High)
+	Assigned to
+	created by
+//can you create models in c# based on these

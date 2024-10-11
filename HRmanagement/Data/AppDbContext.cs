@@ -1,25 +1,28 @@
 ﻿using HRmanagement.Models;
 using Microsoft.EntityFrameworkCore;
 using HRmanagement.Data.enums;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HRmanagement.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
         public DbSet<Designation> Designations { get; set; }
+        public DbSet<EmployeeUser> Emploees { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Designation>().HasData(
                 new Designation
                 {
                     Id = 1,
-                    Name = "Senier Dot Net Developer",
-                    Level = EmployeeLevel.Senior
+                    Name = "None",
+                    Level = EmployeeLevel.Junior,
                 },
                 new Designation
                 {
@@ -32,7 +35,14 @@ namespace HRmanagement.Data
                     Id = 3,
                     Name = "Junior UI/UX Designer",
                     Level = EmployeeLevel.Junior
+                },
+                new Designation
+                {
+                    Id = 4,
+                    Name = "Senior DotNet Developer",
+                    Level = EmployeeLevel.Senior
                 }
+
                 );
         }
     }

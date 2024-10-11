@@ -1,11 +1,14 @@
 ﻿using HRmanagement.Data;
 using HRmanagement.Models;
+using HRmanagement.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace HRmanagement.Controllers
 {
+    [Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company)]
     public class DesignationController : Controller
     {
         private readonly AppDbContext _db;
