@@ -69,6 +69,110 @@ namespace HRmanagement.Migrations
                         });
                 });
 
+            modelBuilder.Entity("HRmanagement.Models.Salary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Bonus")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalSalary")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("salaries");
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.TaskGiven", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AssignedTO")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("severity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("taskStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssignedTO");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.ToTable("Tasks");
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.TimeStorage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("userId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("Timings");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -223,12 +327,10 @@ namespace HRmanagement.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -265,12 +367,10 @@ namespace HRmanagement.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -283,6 +383,9 @@ namespace HRmanagement.Migrations
             modelBuilder.Entity("HRmanagement.Models.EmployeeUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("BaseSalary")
                         .HasColumnType("decimal(18,2)");
@@ -303,16 +406,56 @@ namespace HRmanagement.Migrations
                     b.Property<string>("PAN")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfilePicture")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.HasIndex("DesignationId");
+
                     b.HasDiscriminator().HasValue("EmployeeUser");
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.Salary", b =>
+                {
+                    b.HasOne("HRmanagement.Models.EmployeeUser", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.TaskGiven", b =>
+                {
+                    b.HasOne("HRmanagement.Models.EmployeeUser", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssignedTO")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("HRmanagement.Models.EmployeeUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Assignee");
+
+                    b.Navigation("Creator");
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.TimeStorage", b =>
+                {
+                    b.HasOne("HRmanagement.Models.EmployeeUser", "User")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,6 +507,17 @@ namespace HRmanagement.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HRmanagement.Models.EmployeeUser", b =>
+                {
+                    b.HasOne("HRmanagement.Models.Designation", "designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("designation");
                 });
 #pragma warning restore 612, 618
         }

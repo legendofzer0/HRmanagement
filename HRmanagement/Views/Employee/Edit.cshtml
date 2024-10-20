@@ -1,0 +1,84 @@
+﻿@model EmployeeUser
+
+<h1>Edit Employee</h1>
+
+<div class="row">
+    <div>
+        <form id="registerForm" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <h2>Edit Employee Details</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <!-- Name Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" autocomplete="username" placeholder="Name" />
+                <label asp-for="Name">Name</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Email" class="form-control" autocomplete="username" placeholder="Email" />
+                <label asp-for="Email">Email</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <!-- Base Salary Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="BaseSalary" class="form-control" />
+                <label asp-for="BaseSalary">Base Salary</label>
+                <span asp-validation-for="BaseSalary" class="text-danger"></span>
+            </div>
+
+            <!-- Marital Status Dropdown -->
+            <div class="form-floating mb-3">
+                <label asp-for="MaritalStatus">Marital Status</label>
+                <select asp-for="MaritalStatus" asp-items="ViewBag.MaritalStatusList" class="form-select"></select>
+                <span asp-validation-for="MaritalStatus" class="text-danger"></span>
+            </div>
+
+            <!-- Employment Type Dropdown -->
+            <div class="form-floating mb-3">
+                <label asp-for="Type">Employment Type</label>
+                <select asp-for="Type" asp-items="ViewBag.EmploymentType" class="form-select"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <!-- Phone Number Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number" />
+                <label asp-for="PhoneNumber">Phone Number</label>
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <!-- PAN Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="PAN" class="form-control" placeholder="PAN" />
+                <label asp-for="PAN">PAN</label>
+                <span asp-validation-for="PAN" class="text-danger"></span>
+            </div>
+
+            <!-- Citizenship Number Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="CitizenshipNumber" class="form-control" placeholder="Citizenship Number" />
+                <label asp-for="CitizenshipNumber">Citizenship Number</label>
+                <span asp-validation-for="CitizenshipNumber" class="text-danger"></span>
+            </div>
+
+            <!-- Account Number Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="AccountNumber" class="form-control" placeholder="Account Number" />
+                <label asp-for="AccountNumber">Account Number</label>
+                <span asp-validation-for="AccountNumber" class="text-danger"></span>
+            </div>
+
+            <!-- Designation Dropdown -->
+            <div class="form-floating mb-3">
+                <label asp-for="DesignationId">Designation</label>
+                <select asp-for="DesignationId" asp-items="ViewBag.DesignationList" class="form-select"></select>
+                <span asp-validation-for="DesignationId" class="text-danger"></span>
+            </div>
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>

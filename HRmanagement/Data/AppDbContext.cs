@@ -12,11 +12,31 @@ namespace HRmanagement.Data
         }
 
         public DbSet<Designation> Designations { get; set; }
-        public DbSet<EmployeeUser> Emploees { get; set; }
+        public DbSet<EmployeeUser> Employees { get; set; }
+        public DbSet<TimeStorage> Timings { get; set; }
+        public DbSet<Salary> salaries { get; set; }
+        public DbSet<TaskGiven> Tasks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<TaskGiven>()
+            .HasOne(t => t.Creator)
+            .WithMany()
+            .HasForeignKey(t => t.CreatedBy)
+            .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<TaskGiven>()
+                .HasOne(t => t.Assignee)
+                .WithMany()
+                .HasForeignKey(t => t.AssignedTO)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<EmployeeUser>()
+                .HasOne(e => e.designation)
+                .WithMany()
+                .HasForeignKey(d => d.DesignationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Designation>().HasData(
                 new Designation
                 {

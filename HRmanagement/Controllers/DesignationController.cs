@@ -44,7 +44,7 @@ namespace HRmanagement.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (id == 0 || id == 0)
+            if (id <= 0 )
             {
                 return View("404NotFound");
             }

@@ -5,6 +5,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,12 +14,12 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
 
         public SetPasswordModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<EmployeeUser> userManager,
+            SignInManager<EmployeeUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -105,7 +106,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _signInManager.RefreshSignInAsync((EmployeeUser)user);
             StatusMessage = "Your password has been set.";
 
             return RedirectToPage();

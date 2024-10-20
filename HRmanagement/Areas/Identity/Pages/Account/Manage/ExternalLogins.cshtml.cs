@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,14 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 {
     public class ExternalLoginsModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly IUserStore<IdentityUser> _userStore;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
+        private readonly IUserStore<EmployeeUser> _userStore;
 
         public ExternalLoginsModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
-            IUserStore<IdentityUser> userStore)
+            UserManager<EmployeeUser> userManager,
+            SignInManager<EmployeeUser> signInManager,
+            IUserStore<EmployeeUser> userStore)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -69,7 +70,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
                 .ToList();
 
             string passwordHash = null;
-            if (_userStore is IUserPasswordStore<IdentityUser> userPasswordStore)
+            if (_userStore is IUserPasswordStore<EmployeeUser> userPasswordStore)
             {
                 passwordHash = await userPasswordStore.GetPasswordHashAsync(user, HttpContext.RequestAborted);
             }
@@ -93,7 +94,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
                 return RedirectToPage();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _signInManager.RefreshSignInAsync((EmployeeUser)user);
             StatusMessage = "The external login was removed.";
             return RedirectToPage();
         }

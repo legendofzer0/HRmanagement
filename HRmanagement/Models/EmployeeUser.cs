@@ -1,6 +1,7 @@
 ﻿using HRmanagement.Data.enums;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HRmanagement.Models
 {
@@ -26,10 +27,12 @@ namespace HRmanagement.Models
 
         public string? PAN { get; set; }
         public string? CitizenshipNumber { get; set; }
+        public string? AccountNumber { get; set; }
 
         [Required]
         public int DesignationId { get; set; } = 1;
 
-        public string? ProfilePicture { get; set; }
+        [ForeignKey("DesignationId")]
+        public Designation designation { get; set; }
     }
 }

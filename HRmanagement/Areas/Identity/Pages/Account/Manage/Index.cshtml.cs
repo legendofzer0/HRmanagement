@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,12 +15,12 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 {
     public class IndexModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
 
         public IndexModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            UserManager<EmployeeUser> userManager,
+            SignInManager<EmployeeUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -60,7 +61,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task LoadAsync(EmployeeUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
@@ -110,7 +111,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _signInManager.RefreshSignInAsync((EmployeeUser)user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }

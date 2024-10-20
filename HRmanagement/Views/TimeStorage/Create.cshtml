@@ -1,0 +1,30 @@
+﻿@model TimeStorageViewModel
+
+<h1>New Timing</h1>
+
+<form asp-action="Create" method="post">
+    
+
+    <!-- Date Input -->
+    <input type="date" asp-for="TimeStorage.Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" hidden />
+    <br />
+
+    <!-- Employee Name Dropdown -->
+    Name:
+    <select asp-for="TimeStorage.userId" asp-items="@(new SelectList(Model.Employees, "Id", "Name"))" class="form-select">
+        <option value="">-- Select an Employee --</option>
+    </select>
+    <br />
+
+    <!-- Start Time -->
+    Start Time:
+    <input type="time" asp-for="TimeStorage.StartTime" class="form-control" />
+    <br />
+
+    <!-- End Time -->
+    End Time:
+    <input type="time" asp-for="TimeStorage.EndTime" class="form-control" />
+    <br />
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +17,9 @@ namespace HRmanagement.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<EmployeeUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
+        public ConfirmEmailModel(UserManager<EmployeeUser> userManager)
         {
             _userManager = userManager;
         }
@@ -29,6 +30,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account
         /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
             if (userId == null || code == null)

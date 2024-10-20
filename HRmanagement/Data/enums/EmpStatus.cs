@@ -4,6 +4,6 @@
     {
         Active = 1,
         Inactive = 2,
-        terminated = 3
+        Terminated = 3
     }
 }

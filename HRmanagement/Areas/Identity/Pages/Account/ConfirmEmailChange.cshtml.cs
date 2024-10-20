@@ -5,6 +5,7 @@
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +16,10 @@ namespace HRmanagement.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailChangeModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
 
-        public ConfirmEmailChangeModel(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
+        public ConfirmEmailChangeModel(UserManager<EmployeeUser> userManager, SignInManager<EmployeeUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -61,7 +62,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account
                 return Page();
             }
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _signInManager.RefreshSignInAsync((EmployeeUser)user);
             StatusMessage = "Thank you for confirming your email change.";
             return Page();
         }

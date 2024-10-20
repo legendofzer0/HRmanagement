@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,13 +14,13 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
         private readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<EmployeeUser> userManager,
+            SignInManager<EmployeeUser> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;
@@ -58,7 +59,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
             var userId = await _userManager.GetUserIdAsync(user);
             _logger.LogInformation("User with ID '{UserId}' has reset their authentication app key.", user.Id);
 
-            await _signInManager.RefreshSignInAsync(user);
+            await _signInManager.RefreshSignInAsync((EmployeeUser)user);
             StatusMessage = "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.";
 
             return RedirectToPage("./EnableAuthenticator");

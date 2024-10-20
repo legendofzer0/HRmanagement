@@ -1,0 +1,50 @@
+﻿@model List<TimeStorage>
+
+@{
+	int sn = 1;
+}
+
+<h1>
+	Time Management
+</h1>
+
+<h5>
+	Date: <br />
+	<input type="date" name="name" class="form-control" />
+	<b class="text-capitalize">to</b>
+	<input type="date" name="name" class="form-control" />
+</h5>
+
+<button class="btn btn-success">Search</button>
+<a asp-controller="TimeStorage" asp-action="Create" class="btn btn-success ">
+	<i class="bi bi-plus-circle-fill "></i>New
+</a>
+<br /> <br/>
+<div>
+	<table class="table table-bordered ">
+    <thead>
+        <tr>
+			<th class="col-1">S.N</th>
+			<th>Name</th>
+			<th>Designation</th>
+			<th>Employment Type</th>
+			<th>Start Time</th>
+			<th>End Time</th>
+		</tr>
+    </thead>
+	<tbody>
+			@foreach(var obj in Model)
+			{
+			<tr>
+				<th class="col-1">@sn</th>
+				<th>@obj.User.Name</th>
+				<th>@obj.User.designation.Name</th>
+				<th>@obj.User.Type</th>
+				<td>@obj.StartTime.ToString("hh:mm:ss tt")</td>
+				<td>@obj.EndTime.ToString("hh:mm:ss tt")</td>
+				</tr>
+				sn++;
+			}
+		</tbody>
+</table>
+</div>

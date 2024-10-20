@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using HRmanagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,12 +14,12 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 {
     public class TwoFactorAuthenticationModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
         private readonly ILogger<TwoFactorAuthenticationModel> _logger;
 
         public TwoFactorAuthenticationModel(
-            UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
+            UserManager<EmployeeUser> userManager, SignInManager<EmployeeUser> signInManager, ILogger<TwoFactorAuthenticationModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -67,7 +68,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account.Manage
 
             HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
             Is2faEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
-            IsMachineRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
+            IsMachineRemembered = await _signInManager.IsTwoFactorClientRememberedAsync((EmployeeUser)user);
             RecoveryCodesLeft = await _userManager.CountRecoveryCodesAsync(user);
 
             return Page();

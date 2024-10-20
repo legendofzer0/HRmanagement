@@ -1,0 +1,31 @@
+﻿@model EmployeeUser
+
+
+<div class="row">
+    <div>
+        <form id="registerForm" asp-action="Status" asp-route-id="@Model.Id" method="post">
+            <h2>Edit Employee Staus</h2>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <!-- Name Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Name" class="form-control" autocomplete="username" placeholder="Name" disabled/>
+                <label asp-for="Name">Name</label>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            
+
+            <!-- Marital Status Dropdown -->
+                <label asp-for="Status"> Status</label>
+            <div class="form-floating mb-3">
+                <select asp-for="Status" asp-items="ViewBag.EmpStatus" class="form-select"></select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+
+            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>

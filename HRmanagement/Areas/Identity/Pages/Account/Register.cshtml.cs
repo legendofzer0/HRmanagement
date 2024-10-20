@@ -4,12 +4,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using HRmanagement.Data;
+using HRmanagement.Data.enums;
 using HRmanagement.Models;
 using HRmanagement.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -21,27 +24,31 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace HRmanagement.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<EmployeeUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly UserManager<EmployeeUser> _userManager;
+        private readonly IUserStore<EmployeeUser> _userStore;
+        private readonly IUserEmailStore<EmployeeUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly AppDbContext _db;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
+            UserManager<EmployeeUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            IUserStore<EmployeeUser> userStore,
+            SignInManager<EmployeeUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            AppDbContext db
+            )
         {
             _roleManager = roleManager;
             _userManager = userManager;
@@ -50,6 +57,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _db = db;
         }
 
         /// <summary>
@@ -77,6 +85,10 @@ namespace HRmanagement.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Name")]
+            public string Name { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -105,44 +117,131 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            [Required]
+            public decimal BaseSalary { get; set; }
+
+            [Required]
+            public EmpStatus Status { get; set; } = EmpStatus.Active;
+
+            [Required]
+            [DisplayName("Marital Status")]
+            public MaritialStatus MaritalStatus { get; set; }
+
+            public List<SelectListItem> MaritalStatusList { get; set; }
+
+            [Required]
+            [DisplayName("Employement Type")]
+            public EmpTypes Type { get; set; }
+
+            public List<SelectListItem> EmployementTypeList { get; set; }
+            
+            [DisplayName("PAN Number")]
+            public string? PAN { get; set; }
+            [DisplayName("Phone Number")]
+            public string? PhoneNumber { get; set; }
+            [DisplayName("Citizenship Number")]
+            public string? CitizenshipNumber { get; set; }
+            [DisplayName("Bank Account Number")]
+            public string? AccountNumber { get; set; }
+
             public string? Role { get; set; }
 
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            [Required]
+            [DisplayName("Designation")]
+            public int DesignationId { get; set; }
+
+            public List<SelectListItem> DesignationList { get; set; }
+        }
+
+        private List<SelectListItem> GetMaritalStatusList()
+        {
+            return Enum.GetValues(typeof(MaritialStatus))
+                .Cast<MaritialStatus>()
+                .Select(e => new SelectListItem
+                {
+                    Value = e.ToString(),
+                    Text = e.ToString()
+                }).ToList();
+        }
+
+        private List<SelectListItem> GetEmployementType()
+        {
+            return Enum.GetValues(typeof(EmpTypes))
+                .Cast<EmpTypes>()
+                .Select(e => new SelectListItem
+                {
+                    Value = e.ToString(),
+                    Text = e.ToString()
+                }).ToList();
+        }
+
+        private async Task<List<SelectListItem>> GetDesignationListAsync()
+        {
+            return await _db.Designations
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToListAsync();
         }
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            // Ensure roles exist
             if (!_roleManager.RoleExistsAsync(SD.Role_User_Normal).GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Normal)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Management)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Company)).GetAwaiter().GetResult();
+                await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Normal));
+                await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin));
+                await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Management));
+                await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Company));
             }
 
-            Input = new()
+            // Initialize Input
+            Input = new InputModel
             {
+                MaritalStatusList = GetMaritalStatusList(),
+                EmployementTypeList = GetEmployementType(),
+                DesignationList = await GetDesignationListAsync(),
                 RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
                 {
                     Text = i,
                     Value = i
-                })
+                }).ToList() // Ensure RoleList is a List<SelectListItem>
             };
-            ReturnUrl = returnUrl;
-            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+            ReturnUrl = returnUrl; // Set return URL
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList(); // Get external logins
         }
+
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl ??= Url.Content("~/");
+            returnUrl ??= Url.Content("~/Employee");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
 
+                // Set user properties based on the Input model
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
+                // Populate the employee user fields from Input
+                user.Name = Input.Name; // Set the Name property
+                user.BaseSalary = Input.BaseSalary;
+                user.Status = Input.Status;
+                user.MaritalStatus = Input.MaritalStatus;
+                user.PAN = Input.PAN;
+                user.CitizenshipNumber = Input.CitizenshipNumber;
+                user.AccountNumber = Input.AccountNumber;
+                user.DesignationId = Input.DesignationId;
+                user.PhoneNumber = Input.PhoneNumber;
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
@@ -176,10 +275,11 @@ namespace HRmanagement.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                 }
+
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
@@ -190,7 +290,8 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+
+        private EmployeeUser CreateUser()
         {
             try
             {
@@ -198,19 +299,19 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(EmployeeUser)}'. " +
+                    $"Ensure that '{nameof(EmployeeUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<EmployeeUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<EmployeeUser>)_userStore;
         }
     }
 }
