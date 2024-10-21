@@ -61,6 +61,18 @@ namespace HRmanagement.Data
                     Id = 4,
                     Name = "Senior DotNet Developer",
                     Level = EmployeeLevel.Senior
+                },
+                new Designation
+                {
+                    Id = 5,
+                    Name = "Senior Account",
+                    Level = EmployeeLevel.Senior
+                },
+                new Designation
+                {
+                    Id = 6,
+                    Name = "Project Manager",
+                    Level = EmployeeLevel.Senior
                 }
 
                 );

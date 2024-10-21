@@ -27,4 +27,11 @@ TaskGiven
 	Severity (e.g., Low, Medium, High)
 	Assigned to
 	created by
-//can you create models in c# based on these
+
+Models:
+	Admin: Done
+	Management: ToDO
+	Account: ToDO
+	Normal: ToDO
+	Company: ToDO
+	Analytics: ToDO

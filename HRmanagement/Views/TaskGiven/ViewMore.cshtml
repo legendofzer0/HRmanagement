@@ -1,0 +1,55 @@
+﻿@model TaskGiven
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<h1>View Task</h1>
+
+<form asp-action="View" method="post">
+     <div>
+         <label>Task Name</label>
+         <input asp-for="Name" type="text" class="form-control" disabled/>
+         <span asp-validation-for="Name" class="text-danger"></span>
+     </div>
+
+     <div>
+         <label>Description</label>
+        <textarea asp-for="Description" class="form-control" disabled></textarea>
+         <span asp-validation-for="Description" class="text-danger"></span>
+     </div>
+
+     <div>
+         <label>Assign To</label>
+         <input type="text" asp-for="CreatedBy" value="@ViewBag.AssigneeId" disabled hidden />
+        <select asp-for="AssignedTO" asp-items="ViewBag.Employees" class="form-control" disabled>
+             <option value="">--Select--</option>
+         </select>
+         <span asp-validation-for="AssignedTO" class="text-danger"></span>
+     </div>
+
+     <div>
+         <label>Severity</label>
+        <select asp-for="severity" class="form-select" disabled>
+             <option value="">--Select--</option>
+             <option value="1">Normal</option>
+             <option value="2">Low</option>
+             <option value="3">Medium</option>
+             <option value="4">High</option>
+             <option value="5">Critical</option>
+         </select>
+         <span asp-validation-for="severity" class="text-danger"></span>
+     </div>
+    <div>
+        <label>Status</label>
+        <select asp-for="taskStatus" class="form-select" disabled>
+            <option value="">--Select--</option>
+            <option value="0">Pending</option>
+            <option value="1">InProgress</option>
+            <option value="2">Completed</option>
+            <option value="3">OnHold</option>
+        </select>
+        <span asp-validation-for="severity" class="text-danger"></span>
+    </div>
+
+     <br />
+ </form>

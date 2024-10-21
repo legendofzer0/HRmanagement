@@ -134,13 +134,16 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             public EmpTypes Type { get; set; }
 
             public List<SelectListItem> EmployementTypeList { get; set; }
-            
+
             [DisplayName("PAN Number")]
             public string? PAN { get; set; }
+
             [DisplayName("Phone Number")]
             public string? PhoneNumber { get; set; }
+
             [DisplayName("Citizenship Number")]
             public string? CitizenshipNumber { get; set; }
+
             [DisplayName("Bank Account Number")]
             public string? AccountNumber { get; set; }
 
@@ -198,6 +201,7 @@ namespace HRmanagement.Areas.Identity.Pages.Account
                 await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Admin));
                 await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Management));
                 await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Company));
+                await _roleManager.CreateAsync(new IdentityRole(SD.Role_User_Accounts));
             }
 
             // Initialize Input
@@ -216,7 +220,6 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             ReturnUrl = returnUrl; // Set return URL
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList(); // Get external logins
         }
-
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -289,7 +292,6 @@ namespace HRmanagement.Areas.Identity.Pages.Account
             // If we got this far, something failed, redisplay form
             return Page();
         }
-
 
         private EmployeeUser CreateUser()
         {

@@ -79,44 +79,25 @@ namespace HRmanagement.Controllers
             return View();
         }
 
-        [Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company + "," + SD.Role_User_Management)]
-        public async Task<IActionResult> View(int? id)
+        [Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company + "," + SD.Role_User_Management + "," + SD.Role_User_Normal)]
+        public async Task<IActionResult> ViewMore(int? id)
         {
             if (id == null)
             {
-                return View("404NotFound");
+                return NotFound();
             }
-
-            // Fetch the active employees for the dropdown
             var employees = await _userManager.Users
-                .Where(e => e.Status.Equals(EmpStatus.Active))
-                .Select(e => new { e.Id, e.Name })
-                .ToListAsync();
-
-            // Get the logged-in user's ID
-            var assigneeId = _userService.GetLoggedInUserId(); // Ensure this is synchronous or adjust accordingly
-            ViewBag.AssigneeId = assigneeId;
+               .Where(e => e.Status.Equals(EmpStatus.Active))
+               .Select(e => new { e.Id, e.Name })
+               .ToListAsync();
             ViewBag.Employees = new SelectList(employees, "Id", "Name");
+            ViewBag.AssigneeId = _userService.GetLoggedInUserId();
 
-            // Find the task and include related employee data (creator and assignee)
-            var getTask = await _db.Tasks
-                .Include(t => t.Creator)
+            var tasks = await _db.Tasks
                 .Include(t => t.Assignee)
+                .Include(t => t.Creator)
                 .FirstOrDefaultAsync(t => t.Id == id);
-
-            if (getTask == null)
-            {
-                return View("404NotFound");
-            }
-
-            return  View(getTask);
-        }
-
-        [Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company + "," + SD.Role_User_Management)]
-        [HttpPost]
-        public async Task<IActionResult> View(TaskGiven obj)
-        {
-            return View();
+            return View(tasks);
         }
     }
 }
