@@ -30,7 +30,7 @@ TaskGiven
 
 Models:
 	Admin: Done
-	Management: ToDO
+	Management: Done
 	Account: ToDO
 	Normal: ToDO
 	Company: ToDO

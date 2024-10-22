@@ -36,7 +36,23 @@ namespace HRmanagement.Controllers
             return View(tasks);
         }
 
-        [Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company + "," + SD.Role_User_Management)]
+        [Authorize(Roles = SD.Role_User_Management)]
+        public IActionResult IndexManagement()
+        {
+            var assigneeId = _userService.GetLoggedInUserId();
+            if (assigneeId == null)
+            {
+                return NotFound();
+            }
+            var tasks = _db.Tasks
+                .Include(t => t.Creator)
+                .Include(t => t.Assignee)
+                .Where(t => t.CreatedBy == assigneeId)
+                .ToList();
+            return View(tasks);
+        }
+
+        [Authorize(Roles = SD.Role_User_Company + "," + SD.Role_User_Management)]
         public async Task<IActionResult> Create()
         {
             var employees = await _userManager.Users
@@ -63,8 +79,7 @@ namespace HRmanagement.Controllers
 
                 // Success message
                 TempData["SucessMessage"] = "New Task Created Sucessfully";
-
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexManagement");
             }
 
             // If something went wrong, refill the ViewBag and return the view with an error message
@@ -74,7 +89,6 @@ namespace HRmanagement.Controllers
                 .ToListAsync();
             ViewBag.Employees = new SelectList(employees, "Id", "Name");
             ViewBag.AssigneeId = _userService.GetLoggedInUserId();
-
             TempData["ErrorMessage"] = "Failed to create the task. Please check the input data.";
             return View();
         }
@@ -98,6 +112,51 @@ namespace HRmanagement.Controllers
                 .Include(t => t.Creator)
                 .FirstOrDefaultAsync(t => t.Id == id);
             return View(tasks);
+        }
+
+        [Authorize(Roles = SD.Role_User_Company + "," + SD.Role_User_Management)]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var employees = await _userManager.Users
+               .Where(e => e.Status.Equals(EmpStatus.Active))
+               .Select(e => new { e.Id, e.Name })
+               .ToListAsync();
+            ViewBag.Employees = new SelectList(employees, "Id", "Name");
+
+            var tasks = await _db.Tasks
+                .Include(t => t.Assignee)
+                .Include(t => t.Creator)
+                .FirstOrDefaultAsync(t => t.Id == id);
+            return View(tasks);
+        }
+
+        [Authorize(Roles = SD.Role_User_Company + "," + SD.Role_User_Management)]
+        [HttpPost]
+        public async Task<IActionResult> Edit(TaskGiven obj)
+        {
+            try
+            {
+                _db.Tasks.Update(obj);
+                await _db.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Task Edited Successfully";
+                return RedirectToAction("IndexManagement");
+            }
+            catch (Exception ex)
+            {
+                // Re-populate the employee dropdown if validation fails
+                var employees = await _userManager.Users
+                    .Where(e => e.Status == EmpStatus.Active)
+                    .Select(e => new { e.Id, e.Name })
+                    .ToListAsync();
+                ViewBag.Employees = new SelectList(employees, "Id", "Name");
+
+                TempData["Error"] = "Something Went Wrong";
+                return View(obj);
+            }
         }
     }
 }

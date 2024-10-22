@@ -44,7 +44,7 @@ namespace HRmanagement.Controllers
 
         public IActionResult Edit(int? id)
         {
-            if (id <= 0 )
+            if (id <= 0)
             {
                 return View("404NotFound");
             }
@@ -66,6 +66,8 @@ namespace HRmanagement.Controllers
                 TempData["SucessMessage"] = "Designation Edited Successfully";
                 return RedirectToAction("Index");
             }
+            TempData["Error"] = "Something Went Wrong";
+
             return View();
         }
 
@@ -73,11 +75,13 @@ namespace HRmanagement.Controllers
         {
             if (id == 0 || id == 0)
             {
+                TempData["Error"] = "Designation not found";
                 return View("404NotFound");
             }
             Designation? designationFromDb = _db.Designations.Find(id);
             if (designationFromDb == null)
             {
+                TempData["Error"] = "Designation not found";
                 return View("404NotFound");
             }
             return View(designationFromDb);

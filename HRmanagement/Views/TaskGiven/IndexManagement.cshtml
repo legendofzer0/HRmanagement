@@ -1,4 +1,4 @@
-﻿@model List<TaskGiven>
+﻿@model IEnumerable<TaskGiven>
 
 @{
 	int sn = 1;
@@ -7,31 +7,39 @@
 
 
 <div>
-	Search Field: <br/>
-	Created By:<select>
-		<option value="">---Select---</option>
-	</select> <br />
+	Search Field: <br />
 	Given to: <select>
 		<option value="">---Select---</option>
 	</select> <br />
+	Severity: <select>
+		<option value="">---Select---</option>
+		<option value="1">Normal</option>
+		<option value="2">LOW</option>
+		<option value="3">MEDIUM</option>
+		<option value="4">High</option>
+		<option value="5">CRITICAL</option>
+	</select> <br />
 	Task Title: <input type="text">
 	<button class="btn btn-success">Filter</button>
+</div>
+<div>
+	<a asp-controller="TaskGiven" asp-action="Create" class="btn btn-success">New</a>
 </div>
 
 <table class="table table-bordered">
 	<thead>
 		<tr>
-		<th>S.N</th>
-		<th>Title</th>
-		<th>Given By</th>
-		<th>Given To</th>
-		<th>Severity</th>
-		<th>Status</th>
-		<th></th>
+			<th>S.N</th>
+			<th>Title</th>
+			<th>Given By</th>
+			<th>Given To</th>
+			<th>Severity</th>
+			<th>Status</th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
-		@foreach(var obj in Model)
+		@foreach (var obj in Model)
 		{
 			<tr>
 				<th>@sn</th>
@@ -42,11 +50,12 @@
 				<th>@obj.taskStatus</th>
 				<th>
 					<a asp-action="ViewMore" asp-route-id="@obj.Id" class="btn btn-primary mx-2">View More</a>
+					<a asp-action="Edit" asp-route-id="@obj.Id" class="btn btn-success mx-2">Edit</a>
 				</th>
 			</tr>
-			
-				sn++;
-			
+
+			sn++;
+
 		}
 	</tbody>
 </table>

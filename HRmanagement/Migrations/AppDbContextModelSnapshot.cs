@@ -40,7 +40,7 @@ namespace HRmanagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designations");
+                    b.ToTable("Designations", (string)null);
 
                     b.HasData(
                         new
@@ -103,7 +103,7 @@ namespace HRmanagement.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("salaries");
+                    b.ToTable("salaries", (string)null);
                 });
 
             modelBuilder.Entity("HRmanagement.Models.TaskGiven", b =>
@@ -142,7 +142,7 @@ namespace HRmanagement.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Tasks", (string)null);
                 });
 
             modelBuilder.Entity("HRmanagement.Models.TimeStorage", b =>
@@ -170,7 +170,7 @@ namespace HRmanagement.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("Timings");
+                    b.ToTable("Timings", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
