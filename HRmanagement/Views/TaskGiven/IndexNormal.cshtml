@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TaskGiven>
+
+@{
+    int sn = 1;
+}
+<h1>Tasks Given</h1>
+
+<!-- Search Form -->
+<div>
+    <form asp-action="IndexNormal" method="get">
+        <div>
+            Task Title: 
+            <input type="text" name="taskTitle" value="@Context.Request.Query["taskTitle"]" />
+        </div>
+        <div>
+            Severity: 
+            <select name="severity" value="@Context.Request.Query["severity"]">
+                <option value="">---Select---</option>
+                <option value="1" >Normal</option>
+                <option value="2" >Low</option>
+                <option value="3">Medium</option>
+                <option value="4">High</option>
+                <option value="5">Critical</option>
+            </select>
+        </div>
+        <button class="btn btn-success">Filter</button>
+    </form>
+</div>
+
+<!-- New Task Button -->
+<div>
+    <a asp-controller="TaskGiven" asp-action="Create" class="btn btn-success">New</a>
+</div>
+
+<!-- Tasks Table -->
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>S.N</th>
+            <th>Title</th>
+            <th>Given By</th>
+            <th>Given To</th>
+            <th>Severity</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var obj in Model)
+        {
+            <tr>
+                <th>@sn</th>
+                <th>@obj.Name</th>
+                <th>@obj.Creator.Name</th>
+                <th>@obj.Assignee.Name</th>
+                <th>@obj.severity</th>
+                <th>@obj.taskStatus</th>
+                <th>
+                    <a asp-action="ViewMore" asp-route-id="@obj.Id" class="btn btn-primary mx-2">View More</a>
+                    <a asp-action="EditStatus" asp-route-id="@obj.Id" class="btn btn-success mx-2">Edit Status</a>
+                </th>
+            </tr>
+            sn++;
+        }
+    </tbody>
+</table>

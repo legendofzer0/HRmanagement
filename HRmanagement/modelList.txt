@@ -31,7 +31,7 @@ TaskGiven
 Models:
 	Admin: Done
 	Management: Done
-	Account: ToDO
-	Normal: ToDO
-	Company: ToDO
+	Account: Done
+	Normal: Done
+	Company: Done
 	Analytics: ToDO

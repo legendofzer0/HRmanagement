@@ -4,6 +4,7 @@ using HRmanagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HRmanagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241022144119_colmSalary")]
+    partial class colmSalary
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -92,16 +95,16 @@ namespace HRmanagement.Migrations
                     b.Property<string>("AccountNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("BaseSalary")
+                    b.Property<decimal?>("BaseSalary")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Bonus")
+                    b.Property<decimal?>("Bonus")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("Deduction")
+                    b.Property<decimal?>("Deduction")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Description")
@@ -116,9 +119,6 @@ namespace HRmanagement.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalSalary")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("userId")
                         .IsRequired()

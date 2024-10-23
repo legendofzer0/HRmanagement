@@ -3,33 +3,29 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-<h1>Edit Task</h1>
+<h1>Edit Task Status</h1>
 
-<form asp-action="Edit" method="post">
+<form asp-action="EditStatus" method="post">
     <div>
         <label>Task Name</label>
-        <input asp-for="Name" type="text" class="form-control"  />
+        <input asp-for="Name" type="text" class="form-control" readonly/>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div>
         <label>Description</label>
-        <textarea asp-for="Description" class="form-control" ></textarea>
+        <textarea asp-for="Description" class="form-control" readonly></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div>
-        <label>Assign To</label>
-        <input type="text" asp-for="CreatedBy" hidden readonly />
-        <select asp-for="AssignedTO" asp-items="ViewBag.Employees" class="form-control" >
-            <option value="">--Select--</option>
-        </select>
-        <span asp-validation-for="AssignedTO" class="text-danger"></span>
+        <input type="text" asp-for="CreatedBy" hidden  readonly />
+        <input asp-for="AssignedTO" hidden readonly />
     </div>
 
     <div>
-        <label>Severity</label>
-        <select asp-for="severity" class="form-select" >
+         
+        <select asp-for="severity" class="form-select" hidden readonly>
             <option value="">--Select--</option>
             <option value="1">Normal</option>
             <option value="2">Low</option>
@@ -40,7 +36,8 @@
         <span asp-validation-for="severity" class="text-danger"></span>
     </div>
     <div>
-        <select asp-for="taskStatus" class="form-select" hidden readonly>
+        <label>Status</label>
+        <select asp-for="taskStatus" class="form-select">
             <option value="">--Select--</option>
             <option value="0">Pending</option>
             <option value="1">InProgress</option>

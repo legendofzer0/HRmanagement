@@ -1,0 +1,51 @@
+﻿@model Salary
+
+<h1>New Salary Record</h1>
+
+<div id="loadingSpinner" style="display: none;">Loading...</div>
+<form asp-action="New" method="post">
+    <div>
+        <label>Employee Name</label>
+        
+        <input class="form-control" asp-for="EmployeeName" id="EmployeeNames" readonly />
+    </div>
+
+    <div>
+        <label>Phone Number</label>
+        <input asp-for="PhoneNumber" type="text" id="PhoneNumber" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Account Number</label>
+        <input asp-for="AccountNumber" id="AccountNumber" type="text" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Base Salary</label>
+        <input asp-for="BaseSalary" type="number" id="BaseSalary" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Bonus</label>
+        <input asp-for="Bonus" type="number" value="0" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Deduction</label>
+        <input asp-for="Deduction" value="0" type="number" class="form-control" readonly/>
+    </div>
+    <div>
+        <label>Total Salary</label>
+        <input asp-for="TotalSalary" type="number" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Leave Taken</label>
+        <input asp-for="LeaveTaken" type="number" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control" readonly></textarea>
+    </div>
+    <div>
+        <label>Created</label>
+        <input asp-for="Created" type="date" id="Created" class="form-control"  readonly />
+    </div>
+</form>
+
+

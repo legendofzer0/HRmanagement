@@ -22,15 +22,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        
                          <!--forAdmin-->
                         @if (User.IsInRole(SD.Role_User_Admin) )
                         {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="Designation" asp-action="Index">Designation</a>
                             </li>
@@ -48,8 +46,54 @@
                         @if (User.IsInRole(SD.Role_User_Management))
                         {
                             <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="TaskGiven" asp-action="IndexManagement">Tasks</a>
                             </li>
+                        }
+                        <!--forNormal-->
+                        @if (User.IsInRole(SD.Role_User_Normal))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="TaskGiven" asp-action="IndexNormal">Tasks</a>
+                            </li>
+                        }
+                        <!--forAccount-->
+                        @if (User.IsInRole(SD.Role_User_Accounts))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Salary" asp-action="Index">Manage_Salary</a>
+                            </li>
+                        }
+                         <!--forCompany-->
+                        @if (User.IsInRole(SD.Role_User_Company) )
+                        {
+                            
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Designation" asp-action="Index">Designation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="TimeStorage" asp-action="Index">Time Manage</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="Employee" asp-action="Index">Employee</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " asp-area="" asp-controller="TaskGiven" asp-action="Index">Tasks</a>
+                            </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " asp-area="" asp-controller="Salary" asp-action="Index">Manage_Salary</a>
+                                </li>
                         }
                         
                     </ul>

@@ -1,0 +1,112 @@
+﻿@model Salary
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#EmployeeName').change(function () {
+            var userId = $(this).val(); // Get the selected employee ID
+            if (userId) {
+                $('#loadingSpinner').show(); // Show loading spinner
+                $('#submitButton').prop('disabled', true); // Disable submit button
+
+                $.ajax({
+                    url: '@Url.Action("GetEmployeeDetails", "Salary")',
+                    type: 'GET',
+                    data: { id: userId },
+                    beforeSend: function () {
+                        $('#EmployeeName').prop('disabled', true); // Disable dropdown during request
+                    },
+                    success: function (data) {
+                        // Set employee data or default value if null or undefined
+                        $('#PhoneNumber').val(data.phoneNumber || '0');
+                        $('#AccountNumber').val(data.accountNumber || '0');
+                        $('#EmployeeNames').val(data.name || 'Unknown'); // Set hidden name field
+                        $('#BaseSalary').val(data.baseSalary || '0');
+                        $('#Created').val(new Date().toISOString().split('T')[0]); // Set the current date
+                        $('#submitButton').prop('disabled', false); // Enable submit button
+                        calculateTotalSalary();
+                    },
+                    error: function () {
+                        alert('Error retrieving employee details.');
+                    },
+                    complete: function () {
+                        $('#EmployeeName').prop('disabled', false); // Re-enable dropdown
+                        $('#loadingSpinner').hide(); // Hide loading spinner
+                    }
+                });
+            } else {
+                // Clear fields if no employee is selected
+                $('#PhoneNumber').val('');
+                $('#AccountNumber').val('');
+                $('#BaseSalary').val('');
+                $('#Created').val('');
+                $('#submitButton').prop('disabled', true); // Disable submit button if no employee selected
+            }
+        });
+    });
+</script>
+
+<h1>New Salary Record</h1>
+
+<div id="loadingSpinner" style="display: none;">Loading...</div>
+<form asp-action="New" method="post">
+    <div>
+        <label>Employee Name</label>
+        <select asp-for="userId" class="form-control" id="EmployeeName" asp-items="ViewBag.Employees">
+            <option value="">--Select--</option>
+        </select>
+        <input type="hidden" asp-for="EmployeeName" id="EmployeeNames" />
+    </div>
+
+    <div>
+        <label>Phone Number</label>
+        <input asp-for="PhoneNumber" type="text" id="PhoneNumber" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Account Number</label>
+        <input asp-for="AccountNumber" id="AccountNumber" type="text" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Base Salary</label>
+        <input asp-for="BaseSalary" type="number" id="BaseSalary" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Bonus</label>
+        <input asp-for="Bonus" type="number" value="0" class="form-control" onchange="calculateTotalSalary()" />
+    </div>
+    <div>
+        <label>Deduction</label>
+        <input asp-for="Deduction" value="0" type="number" class="form-control" onchange="calculateTotalSalary()" />
+    </div>
+    <div>
+        <label>Total Salary</label>
+        <input asp-for="TotalSalary" type="number" class="form-control" readonly />
+    </div>
+    <div>
+        <label>Leave Taken</label>
+        <input asp-for="LeaveTaken" type="number" class="form-control" value="0" />
+    </div>
+    <div>
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div>
+        <label>Created</label>
+        <input asp-for="Created" type="date" id="Created" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" readonly />
+    </div>
+    <button type="submit" class="btn btn-success" id="submitButton">Submit</button>
+</form>
+
+@section Scripts {
+    <script>
+        function calculateTotalSalary() {
+            const baseSalary = parseFloat(document.querySelector('input[name="BaseSalary"]').value) || 0;
+            const bonus = parseFloat(document.querySelector('input[name="Bonus"]').value) || 0;
+            const deduction = parseFloat(document.querySelector('input[name="Deduction"]').value) || 0;
+
+            const totalSalary = baseSalary + bonus - deduction;
+
+            document.querySelector('input[name="TotalSalary"]').value = totalSalary.toFixed(2);
+        }
+    </script>
+}

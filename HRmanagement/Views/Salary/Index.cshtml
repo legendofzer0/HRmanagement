@@ -1,0 +1,41 @@
+﻿@model List<Salary>
+@{
+	int sn = 1;
+}
+<h1>Salary Given</h1>
+
+<div>
+	Filter by : <br/>
+	Name: <input type="text" name="name" value="" /> <br />
+	Date: <input type="date" id="start" name="start"> - <input type="date" id="end" name="end"> <br /><br />
+</div>
+<div>
+	<a asp-action="New" class="btn btn-success">NEW</a>
+	<br /><br />
+	<table class="table table-bordered">
+	<thead>
+		<tr>
+			<td>S.N</td>
+			<td>Name</td>
+			<td>Date</td>
+			<td>Total</td>
+			<td></td>
+		</tr>
+	</thead>
+	<tbody>
+			@foreach (var obj in Model)
+			{
+				<tr>
+					<td>@sn</td>
+					<td>@obj.EmployeeName</td>
+					<td>@obj.Created</td>
+					<td>@obj.TotalSalary</td>
+					<td>
+						<a asp-action="More" asp-route-id="@obj.Id" class="btn btn-primary">View More</a>
+					</td>
+				</tr>
+				sn++;
+			}
+	</tbody>
+</table>
+</div>

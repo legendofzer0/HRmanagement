@@ -5,22 +5,25 @@
 }
 <h1>Tasks Given</h1>
 
-
 <div>
-	Search Field: <br />
-	Given to: <select>
-		<option value="">---Select---</option>
-	</select> <br />
-	Severity: <select>
-		<option value="">---Select---</option>
-		<option value="1">Normal</option>
-		<option value="2">LOW</option>
-		<option value="3">MEDIUM</option>
-		<option value="4">High</option>
-		<option value="5">CRITICAL</option>
-	</select> <br />
-	Task Title: <input type="text">
+<form asp-action="IndexManagement" method="get">
+	<div>
+		Task Title:
+		<input type="text" name="taskTitle" value="@Context.Request.Query["taskTitle"]" />
+	</div>
+	<div>
+		Severity:
+		<select name="severity" value="@Context.Request.Query["severity"]">
+			<option value="">---Select---</option>
+			<option value="1">Normal</option>
+			<option value="2">Low</option>
+			<option value="3">Medium</option>
+			<option value="4">High</option>
+			<option value="5">Critical</option>
+		</select>
+	</div>
 	<button class="btn btn-success">Filter</button>
+</form>
 </div>
 <div>
 	<a asp-controller="TaskGiven" asp-action="Create" class="btn btn-success">New</a>
