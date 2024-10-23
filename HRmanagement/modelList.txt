@@ -34,4 +34,4 @@ Models:
 	Account: Done
 	Normal: Done
 	Company: Done
-	Analytics: ToDO
+	Analytics: Done
