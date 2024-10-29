@@ -2,6 +2,7 @@
 using HRmanagement.Data.enums;
 using HRmanagement.Models;
 using HRmanagement.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,8 +11,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Threading.Tasks;
 
+[Authorize(Roles = SD.Role_User_Admin + "," + SD.Role_User_Company)]
 public class EmployeeController : Controller
 {
+
     private readonly UserManager<EmployeeUser> _userManager;
     private readonly AppDbContext _db;
     private readonly DesignationService _designationService;
